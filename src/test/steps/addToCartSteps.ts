@@ -16,13 +16,14 @@ Given('User searches for a {string}', async function (book) {
     await fixture.page.locator("mat-option[role='option'] span").click();
 });
 
+    //This is used to add the book to the cart
 When('User adds the book to the cart', async function () {
 
     await fixture.page.locator("//button[@color='primary']").click();
 
 });
 
-       
+    //This is used to check to ensure that the book has been added to the cart
 Then('the cart badge should get updated', async function () {
 
     const badgeCount = await fixture.page.locator("#mat-badge-content-0").textContent();
