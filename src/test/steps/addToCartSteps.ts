@@ -16,6 +16,7 @@ Given('User searches for a {string}', async function (book) {
     await fixture.page.locator("mat-option[role='option'] span").click();
 });
 
+    //This is used to add the book to the cart
 When('User adds the book to the cart', async function () {
 
     await fixture.page.locator("//button[@color='primary']").click();
