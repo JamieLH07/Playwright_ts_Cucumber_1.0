@@ -22,7 +22,7 @@ When('User adds the book to the cart', async function () {
 
 });
 
-       
+    //This is used to check to ensure that the book has been added to the cart
 Then('the cart badge should get updated', async function () {
 
     const badgeCount = await fixture.page.locator("#mat-badge-content-0").textContent();
