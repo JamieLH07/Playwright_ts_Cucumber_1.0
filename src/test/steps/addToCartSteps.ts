@@ -9,7 +9,7 @@ let browser:Browser;
 let page: Page;
 
 Given('User searches for a {string}', async function (book) {
-    
+    //This is used to search for a book based on a string from the Feature files
     fixture.logger.info("Searching for a book: " + book)
     await fixture.page.locator("input[type='search']").fill(book);
     await fixture.page.waitForTimeout(2000);
