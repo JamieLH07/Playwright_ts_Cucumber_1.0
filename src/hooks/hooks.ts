@@ -5,6 +5,7 @@ import { createLogger} from "winston";
 import { fixture } from "./pageFixture";
 import { invokeBrowser } from "../helper/browsers/browserManager";
 import { options } from "../helper/util/logger";
+const fs = require("fs-extra");
 
 let browser: Browser;
 let context: BrowserContext;
