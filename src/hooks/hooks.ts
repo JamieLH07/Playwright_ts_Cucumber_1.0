@@ -19,7 +19,11 @@ BeforeAll(async function () {
 Before(async function ({pickle}) {
     const scenarioName = pickle.name+pickle.id
     //This is used to start a new context(clean tab) for each test
-    context = await browser.newContext();
+    context = await browser.newContext({
+        recordVideo: {
+            dir: "test-results/vidoes",
+        },
+    });
     const page = await browser.newPage();
     fixture.page = page;
     fixture.logger = createLogger(options(scenarioName));
@@ -41,20 +45,39 @@ Before(async function ({pickle}) {
 After(async function ({ pickle, result }) {
 
     //How to set the command so that a screenshot if only taken on a failure 
+    let videoPath: string;
+    let img: Buffer;
     console.log(result?.status);
     if (result?.status == Status.FAILED) {
 
         //how to take a screenshot (pickle is used to get the scenario name which is then added to the name of the screenshot)
         const img = await fixture.page.screenshot({ path: "./test-results/screenshots/" + pickle.name + '.png', type: "png" })
+        videoPath = await fixture.page.video().path();
+
 
         //how to attach the screenshot to the report
         await this.attach(img, "image/png");
-
+        
+        //how to attach the video to the report
+        await this.attach(
+            fs.readFileSync(videoPath),
+        'video/webm'
+        );
     }
 
     //This is used to close down the tab after each test 
     await fixture.page.close();
     await context.close();
+    if (result?.status == Status.FAILED){
+        await this.attach(
+            img, "image/png"
+        );
+        await this.attach(
+            fs.readFileSync(videoPath),
+            'video/webm'
+        );
+
+    }
 
 });
 
