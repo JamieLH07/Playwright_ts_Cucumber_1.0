@@ -1,5 +1,5 @@
 import {Given, When, Then, setDefaultTimeout} from "@cucumber/cucumber";
-fixture
+
 setDefaultTimeout(60 * 1000 * 2);
 
 import {chromium, Page, Browser, expect} from "@playwright/test";

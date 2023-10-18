@@ -1,9 +1,9 @@
 import { Before, After, BeforeAll, AfterAll, BeforeStep, AfterStep, Status } from "@cucumber/cucumber";
 import { chromium, Browser, BrowserContext } from "@playwright/test";
-import { pageFixture } from "./pageFixture";
-import { invokeBrowser } from "../helper/browsers/browserManager";
 import { getEnv } from "../helper/env/env";
 import { createLogger} from "winston";
+import { fixture } from "./pageFixture";
+import { invokeBrowser } from "../helper/browsers/browserManager";
 import { options } from "../helper/util/logger";
 
 let browser: Browser;
@@ -21,8 +21,8 @@ Before(async function ({pickle}) {
     //This is used to start a new context(clean tab) for each test
     context = await browser.newContext();
     const page = await browser.newPage();
-    pageFixture.page = page;
-    pageFixture.logger = createLogger(options(scenarioName));
+    fixture.page = page;
+    fixture.logger = createLogger(options(scenarioName));
 
 });
 
@@ -45,7 +45,7 @@ After(async function ({ pickle, result }) {
     if (result?.status == Status.FAILED) {
 
         //how to take a screenshot (pickle is used to get the scenario name which is then added to the name of the screenshot)
-        const img = await pageFixture.page.screenshot({ path: "./test-results/screenshots/" + pickle.name + '.png', type: "png" })
+        const img = await fixture.page.screenshot({ path: "./test-results/screenshots/" + pickle.name + '.png', type: "png" })
 
         //how to attach the screenshot to the report
         await this.attach(img, "image/png");
@@ -53,7 +53,7 @@ After(async function ({ pickle, result }) {
     }
 
     //This is used to close down the tab after each test 
-    await pageFixture.page.close();
+    await fixture.page.close();
     await context.close();
 
 });
@@ -62,6 +62,6 @@ AfterAll(async function () {
 
     //This is used to close down the browser after each test 
     await browser.close();
-    pageFixture.logger.close();
+    fixture.logger.close();
 
 });
